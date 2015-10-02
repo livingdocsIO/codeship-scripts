@@ -20,7 +20,7 @@ CACHED_DOWNLOAD="${HOME}/cache/elasticsearch-${ELASTICSEARCH_VERSION}.tar.gz"
 mkdir -p "${ELASTICSEARCH_DIR}"
 wget --continue --output-document "${CACHED_DOWNLOAD}" "https://download.elastic.co/elasticsearch/elasticsearch/elasticsearch-${ELASTICSEARCH_VERSION}.tar.gz"
 tar -xaf "${CACHED_DOWNLOAD}" --strip-components=1 --directory "${ELASTICSEARCH_DIR}"
-ls -ld "#{ELASTICSEARCH_DIR}"
+ls -ld "${ELASTICSEARCH_DIR}"
 
 echo "http.port: ${ELASTICSEARCH_PORT}\n" >> ${ELASTICSEARCH_DIR}/config/elasticsearch.yml
 echo "script.disable_dynamic: false\n" >> ${ELASTICSEARCH_DIR}/config/elasticsearch.yml
