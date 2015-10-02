@@ -28,4 +28,5 @@ echo "script.disable_dynamic: false\n" >> ${ELASTICSEARCH_DIR}/config/elasticsea
 # Make sure to use the exact parameters you want for ElasticSearch and give it enough sleep time to properly start up
 # nohup bash -c "${ELASTICSEARCH_DIR}/bin/elasticsearch 2>&1" &
 nohup bash -c "${ELASTICSEARCH_DIR}/bin/elasticsearch" &
+tail -f nohup.out &
 sleep "${ELASTICSEARCH_WAIT_TIME}"
