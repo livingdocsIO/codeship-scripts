@@ -17,6 +17,7 @@ ELASTICSEARCH_VERSION=${ELASTICSEARCH_VERSION:="1.5.2"}
 ELASTICSEARCH_PORT=${ELASTICSEARCH_PORT:="9333"}
 ELASTICSEARCH_DIR=${ELASTICSEARCH_DIR:="$HOME/el"}
 ELASTICSEARCH_PLUGINS=${ELASTICSEARCH_PLUGINS:=""}
+ELASTICSEARCH_WAIT_TIME=${ELASTICSEARCH_WAIT_TIME:="30"}
 
 # The download location of version 5.x, and 2.x seems to follow a different URL structure to 1.x\
 # Make sure to use Oracle JDK 8 for Elasticsearch 5.x run the following commands in your script.
@@ -39,6 +40,20 @@ set -e
 
 CACHED_DOWNLOAD="${HOME}/cache/elasticsearch-${ELASTICSEARCH_VERSION}.tar.gz"
 
+wait () {
+  local timeout=$1
+  local host=$2
+  local port=$3
+  while ! nc -w 1 $host $port 2>/dev/null
+  do
+    let timeout=$timeout-1
+    if (( $timeout < 0 )); then echo -n 'timeout' && exit 1; fi
+    echo -n .
+    sleep 1
+  done
+  echo
+}
+
 mkdir -p "${ELASTICSEARCH_DIR}"
 wget --continue --output-document "${CACHED_DOWNLOAD}" "${ELASTICSEARCH_DL_URL}"
 tar -xaf "${CACHED_DOWNLOAD}" --strip-components=1 --directory "${ELASTICSEARCH_DIR}"
@@ -56,4 +71,4 @@ fi
 
 # Make sure to use the exact parameters you want for ElasticSearch
 bash -c "${ELASTICSEARCH_DIR}/bin/elasticsearch 2>&1 >/dev/null" >/dev/null & disown
-wget --retry-connrefused --tries=0 --waitretry=1 -O- -nv http://localhost:${ELASTICSEARCH_PORT}
+wait $ELASTICSEARCH_WAIT_TIME localhost $ELASTICSEARCH_PORT
