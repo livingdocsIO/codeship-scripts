@@ -60,7 +60,7 @@ tar -xaf "${CACHED_DOWNLOAD}" --strip-components=1 --directory "${ELASTICSEARCH_
 ls -ld "${ELASTICSEARCH_DIR}"
 
 echo "http.port: ${ELASTICSEARCH_PORT}" >> ${ELASTICSEARCH_DIR}/config/elasticsearch.yml
-echo "script.disable_dynamic: false" >> ${ELASTICSEARCH_DIR}/config/elasticsearch.yml
+echo "script.inline: on" >> ${ELASTICSEARCH_DIR}/config/elasticsearch.yml
 
 if [ "$ELASTICSEARCH_PLUGINS" ]
 then
